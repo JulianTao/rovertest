@@ -3,7 +3,7 @@
 # This is an example bash file for build and run ChronoGpu projects
 # Update the numbers of compute nodes, cpu cores and gpus (-N, -n, --gres=gpu:) and computing wall time (-t) based on your computation needs
 # Update your email address (--mail-user=) to recieve notifications
-# replace all the instances of "mychgpu" with your project title (such as "sample_generation"
+# replace all the instances of "rovertest" with your project title (such as "sample_generation"
 
 
 #SBATCH -N 1                        	# number of compute nodes
@@ -25,10 +25,10 @@ mkdir build 				# Make a new directory to host all cmake files
 cd build				# Go to the new build directory
 cmake ..				# Generate Makefiles
 make					# Build the project
-./mychgpu mychgpu.json			# Run the executive
+./rovertest rovertest.json			# Run the executive
 cd ..					# Return to the project directory
-tar czvf mychgpu_output.tgz ./OUT	# Make a tarball of the output files with compression
+tar czvf rovertest_output.tgz ./OUT	# Make a tarball of the output files with compression
 # Move output files to GoogleDrive shared folder. BiGdata is the shared group folder
-# BiGdata:mychgpu will create a new subfolder with the project name "mychgpu"
-rclone copy ./mychgpu_output.tgz BiGdata:mychgpu 
-rm -rf ./OUT mychgpu_output.tgz 		# Remove output files
+# BiGdata:rovertest will create a new subfolder with the project name "rovertest"
+rclone copy ./rovertest_output.tgz BiGdata:rovertest 
+rm -rf ./OUT rovertest_output.tgz 		# Remove output files

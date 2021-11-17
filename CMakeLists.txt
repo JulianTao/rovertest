@@ -1,21 +1,21 @@
 #--------------------------------------------------------------
-# 
-# Example of CMake configuration file to build an external 
+#
+# Example of CMake configuration file to build an external
 # project depending on Chrono and on optional Chrono modules.
-# 
+#
 # This minimal sample project can be used as a template for a
 # user project.  Modify sections 1, 2, and 3 below as appropriate.
-# 
+#
 #--------------------------------------------------------------
- 
+
 
 cmake_minimum_required(VERSION 3.10)
 
 #--------------------------------------------------------------
-# === 1 === 
-# Modify the project name if you want: 
+# === 1 ===
+# Modify the project name if you want:
 #--------------------------------------------------------------
-set(MY_PROJECT mychgpu)
+set(MY_PROJECT rovertest)
 
 project(${MY_PROJECT})
 
@@ -24,18 +24,18 @@ project(${MY_PROJECT})
 # Find the Chrono package and any REQUIRED or OPTIONAL modules
 # by invoking the find_package function in CONFIG mode:
 #    find_package(Chrono
-#	              COMPONENTS req_module1 req_module1 ...
-#	              OPTIONAL opt_module1 opt_module2 ...
+#                     COMPONENTS req_module1 req_module1 ...
+#                     OPTIONAL opt_module1 opt_module2 ...
 #                 CONFIG)
 # The following Chrono modules can be requested (their names
 # are case insensitive): Cascade, Cosimulation, FEA, Irrlicht,
 # Matlab, Parallel, Postprocess, Python, Vehicle.
-# 
-# Note that you will have to set the variable Chrono_DIR to 
+#
+# Note that you will have to set the variable Chrono_DIR to
 # specify the location of the ChronoConfig.cmake script, if
 # it is not in its default install location.
 # Chrono_DIR can be either a Chrono build tree or a Chrono install tree.
-# 
+#
 # The following variables are set and can be used further down:
 # CHRONO_FOUND
 #   set to true if Chrono and all required components were found
@@ -52,32 +52,34 @@ project(${MY_PROJECT})
 #   list of all DLL dependencies (with full path)
 # CHRONO_DATA_DIR
 #   path to the Chrono data make_directory
-# 
+#
 # In addition, for each requested component [COMPONENT], the
 # following variable is set to true (ON) or false (OFF):
 # CHRONO_[COMPONENT]_FOUND
-# 
+#
 # In this example, we only request the Irrlicht module (required)
 #--------------------------------------------------------------
 # Set agave chrono lib to CMAKE_INSTALL_PREFIX
-IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  SET(CMAKE_INSTALL_PREFIX "/packages/7x/chrono" CACHE PATH agavelib FORCE)
-ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "/packages/7x/chrono" CACHE PATH agavelib FORCE)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 # Set Chrono_DIR to find the chrono cmake configuration file
 set(Chrono_DIR "/packages/7x/chrono/6.0.0/lib/cmake")
 
 # Find chrono libs
-LIST(APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}/../chrono/6.0.0/lib")
-find_package(Chrono
-             COMPONENTS gpu
-             CONFIG)
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}/../chrono/6.0.0/lib")
+find_package(
+  Chrono
+  COMPONENTS gpu
+  CONFIG
+)
 
 #--------------------------------------------------------------
 # Return now if Chrono or a required component was not found.
 #--------------------------------------------------------------
 
-if (NOT Chrono_FOUND)
+if(NOT Chrono_FOUND)
   message("Could not find Chrono or one of its required modules")
   return()
 endif()
@@ -96,7 +98,7 @@ endif()
 #     start_demo.sh myexe.app
 
 if(APPLE)
-    set(CMAKE_MACOSX_BUNDLE ON)
+  set(CMAKE_MACOSX_BUNDLE ON)
 endif()
 
 #--------------------------------------------------------------
@@ -112,7 +114,7 @@ include_directories(${CHRONO_INCLUDE_DIRS})
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   if(MSVC AND ${MSVC_VERSION} GREATER_EQUAL 1915)
-    add_definitions( "-D_ENABLE_EXTENDED_ALIGNED_STORAGE" )
+    add_definitions("-D_ENABLE_EXTENDED_ALIGNED_STORAGE")
   endif()
 endif()
 
@@ -120,36 +122,38 @@ endif()
 # Tweaks to disable some warnings with MSVC
 #--------------------------------------------------------------
 if(MSVC)
-    add_definitions("-D_CRT_SECURE_NO_DEPRECATE")  # avoids deprecation warnings
-    add_definitions("-D_SCL_SECURE_NO_DEPRECATE")  # avoids deprecation warnings
-    add_definitions( "-DNOMINMAX" )                # do not use MSVC's min/max macros
-    add_compile_options(/wd4275)                   # disable warnings triggered by Irrlicht
-    add_compile_options(/wd4251)                   # class needs to have dll-interface
+  add_definitions("-D_CRT_SECURE_NO_DEPRECATE")  # avoids deprecation warnings
+  add_definitions("-D_SCL_SECURE_NO_DEPRECATE")  # avoids deprecation warnings
+  add_definitions("-DNOMINMAX")                # do not use MSVC's min/max macros
+  add_compile_options(/wd4275)                   # disable warnings triggered by Irrlicht
+  add_compile_options(/wd4251)                   # class needs to have dll-interface
 else()
-    set(EXTRA_COMPILE_FLAGS "")
+  set(EXTRA_COMPILE_FLAGS "")
 endif()
 
 #--------------------------------------------------------------
 # === 3 ===
-# Add the executable from your project and specify all C++ 
-# files in your project. 
+# Add the executable from your project and specify all C++
+# files in your project.
 #--------------------------------------------------------------
 
 add_executable(${MY_PROJECT} ${MY_PROJECT}.cpp)
 
 #--------------------------------------------------------------
 # Set properties for your executable target
-# 
+#
 # Note that here we define a macro CHRONO_DATA_DIR which will
 # contain the path to the Chrono data directory, either in its
 # source tree (if using a build version of Chrono), or in its
 # install tree (if using an installed version of Chrono).
 #--------------------------------------------------------------
 
-set_target_properties(${MY_PROJECT} PROPERTIES 
-	    COMPILE_FLAGS "${CHRONO_CXX_FLAGS} ${EXTRA_COMPILE_FLAGS}"
-	    COMPILE_DEFINITIONS "CHRONO_DATA_DIR=\"${CHRONO_DATA_DIR}\""
-	    LINK_FLAGS "${CHRONO_LINKER_FLAGS}")
+set_target_properties(
+  ${MY_PROJECT} PROPERTIES
+  COMPILE_FLAGS "${CHRONO_CXX_FLAGS} ${EXTRA_COMPILE_FLAGS}"
+  COMPILE_DEFINITIONS "CHRONO_DATA_DIR=\"${CHRONO_DATA_DIR}\""
+  LINK_FLAGS "${CHRONO_LINKER_FLAGS}"
+)
 
 #--------------------------------------------------------------
 # Link to Chrono libraries and dependency libraries
@@ -159,14 +163,14 @@ target_link_libraries(${MY_PROJECT} ${CHRONO_LIBRARIES})
 
 #--------------------------------------------------------------
 # === 4 (OPTIONAL) ===
-# 
+#
 # Optionally, add a custom command for copying all Chrono and
 # dependency DLLs to the appropriate binary output folder.
 # This function has effect only on Windows.
-# 
+#
 # Note that you must first set EXECUTABLE_OUTPUT_PATH
 # (this can simply be ${CMAKE_BINARY_DIR}, like in this example)
 #--------------------------------------------------------------
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-add_DLL_copy_command("${CHRONO_DLLS}")
+add_dll_copy_command("${CHRONO_DLLS}")
