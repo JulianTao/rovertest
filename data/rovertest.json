@@ -4,7 +4,7 @@
   "box_X": 400,
   "box_Y": 200,
   "box_Z": 50,
-  "step_size": 5e-5,
+  "step_size": 1e-7,
 
   "normalStiffS2S": 1e8,
   "normalStiffS2W": 1e8,
