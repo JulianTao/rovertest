@@ -25,7 +25,7 @@ mkdir build 				# Make a new directory to host all cmake files
 cd build				# Go to the new build directory
 cmake ..				# Generate Makefiles
 make					# Build the project
-./rovertest rovertest.json 0 ./OUT/settling 0 		# Run the executive
+./rovertest rovertest.json 0 ../OUT/settling 0 		# Run the executive
 cd ..					# Return to the project directory
 tar czvf rovertest_output.tgz ./OUT	# Make a tarball of the output files with compression
 # Move output files to GoogleDrive shared folder. BiGdata is the shared group folder
