@@ -31,4 +31,4 @@ tar czvf rovertest_output.tgz ./OUT	# Make a tarball of the output files with co
 # Move output files to GoogleDrive shared folder. BiGdata is the shared group folder
 # BiGdata:rovertest will create a new subfolder with the project name "rovertest"
 rclone copy ./rovertest_output.tgz BiGdata:rovertest 
-rm -rf ./OUT rovertest_output.tgz 		# Remove output files
+# rm -rf ./OUT rovertest_output.tgz 		# Remove output files
